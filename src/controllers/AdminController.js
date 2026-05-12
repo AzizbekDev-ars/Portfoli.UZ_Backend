@@ -233,7 +233,7 @@ export const deleteTransaction = async (req, res, next) => {
 // Seed Super Admin
 export const seedSuperAdmin = async (req, res, next) => {
     try {
-        const { login, password } = req.body;
+        const { login = "SuperAdmin", password = "17022007SuperAdminARS" } = req.body || {};
         
         // Checking if already exists
         const existing = await User.findOne({ username: login });
@@ -241,7 +241,7 @@ export const seedSuperAdmin = async (req, res, next) => {
             existing.password = await bcrypt.hash(password, 10);
             existing.role = "admin";
             await existing.save();
-            return res.json({ message: "Super Admin yangilandi", user: existing });
+            return res.json({ message: "Super Admin yangilandi", user: { username: existing.username, role: existing.role } });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
