@@ -19,7 +19,7 @@ import {
 const adminRoute = express.Router();
 
 // Publicly accessible for initial setup (or protected by a secret if needed)
-adminRoute.post("/seed", asyncHandler(seedSuperAdmin));
+adminRoute.get("/seed", asyncHandler(seedSuperAdmin));
 
 // Protected admin routes
 adminRoute.get("/stats", protect, isAdmin, asyncHandler(getStats));
