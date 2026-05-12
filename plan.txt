@@ -1,0 +1,24 @@
+<<FULL STACK PORTFOLIO>>
+Backend
+
+Description:
+Full Stack Portfolio vith CV and Trackers
+
+Steps:
+1: Create folder ✅
+2: Ctreate Server and isntall (axios, dotenv, cors, jsonwebtoken, cloudinary, express, multer, multer-storage-cloudinary, puppeteer, streamifiler, mongoose, cookie-parser) ✅
+3: Build tree ✅
+4: Create NoSQL (Mongodb cluster) ✅
+5: Create .env and copy paste the MONGO_URI, PORT, JWT_SECRET, CLOUD_NAME, CLOUD_API_KEY, CLOUD_API_SECRET, CLIEND_ID, CLIEND_SECRET ✅
+6: Create server.js ✅ 
+7: Create User model ✅
+8: Create Visitor model ✅
+9: Create Project model ✅
+10: Create Message model ✅
+11: Create CV model 🔄️
+12: Create Developer model 🔄️
+13: Create Middlewares for asyncHandler, globalError, jwtControl ✅
+14: Create User controller ✅
+15: Create Visitor controller ✅
+16: Create cloudinary configuration ✅ 
+17: Create multer configuration ✅

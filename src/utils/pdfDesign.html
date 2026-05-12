@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional CV</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Gray background for viewing outside PDF */
+            display: flex;
+            justify-content: center;
+            padding: 2rem 0;
+            margin: 0;
+        }
+
+        /* Print specific styles for Puppeteer */
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            #cv-container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main A4 Container -->
+    <div id="cv-container" class="w-[210mm] h-[297mm] bg-white flex overflow-hidden text-slate-800 box-border shadow-xl">
+        
+        <!-- Left Column (30%) -->
+        <div id="left-column" class="w-[32%] p-8 flex flex-col gap-8 border-r border-slate-200 bg-white">
+            
+            <!-- Profile Image -->
+            <div class="flex justify-center mt-2">
+                <img src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800" 
+                     class="w-40 h-40 rounded-full object-cover border-4 border-slate-100 grayscale-[20%]" 
+                     alt="Profile Picture">
+            </div>
+
+            <!-- Contact Information -->
+            <div id="section-contact">
+                <h2 class="text-[13px] font-bold tracking-[0.2em] text-slate-900 uppercase border-b-2 border-slate-900 pb-1.5 mb-4">Contact</h2>
+                <ul class="flex flex-col gap-3 text-[12px] text-slate-600">
+                    <li class="flex items-center gap-3">
+                        <div class="w-5 flex justify-center"><i class="fa-solid fa-phone text-slate-800"></i></div>
+                        <span>+1 (555) 123-4567</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <div class="w-5 flex justify-center"><i class="fa-solid fa-envelope text-slate-800"></i></div>
+                        <span>alex.morgan@email.com</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <div class="w-5 flex justify-center"><i class="fa-solid fa-location-dot text-slate-800"></i></div>
+                        <span>San Francisco, CA</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <div class="w-5 flex justify-center"><i class="fa-brands fa-github text-slate-800 text-[14px]"></i></div>
+                        <span>github.com/alexmorgan</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <div class="w-5 flex justify-center"><i class="fa-brands fa-linkedin text-slate-800 text-[14px]"></i></div>
+                        <span>linkedin.com/in/alexmorgan</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Skills -->
+            <div id="section-skills">
+                <h2 class="text-[13px] font-bold tracking-[0.2em] text-slate-900 uppercase border-b-2 border-slate-900 pb-1.5 mb-4">Skills</h2>
+                <div class="flex flex-col gap-4 text-[12px]">
+                    <div>
+                        <h3 class="font-bold text-slate-800 mb-1 uppercase tracking-wider text-[10px]">Frontend</h3>
+                        <p class="text-slate-600 leading-relaxed">React, Vue.js, TypeScript, Tailwind CSS, Next.js, HTML5/CSS3</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 mb-1 uppercase tracking-wider text-[10px]">Backend</h3>
+                        <p class="text-slate-600 leading-relaxed">Node.js, Express, Python, Django, PostgreSQL, MongoDB, Redis</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 mb-1 uppercase tracking-wider text-[10px]">Tools & DevOps</h3>
+                        <p class="text-slate-600 leading-relaxed">Git, Docker, AWS (EC2, S3), CI/CD, Jest, Webpack</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Languages -->
+            <div id="section-languages" class="mt-auto mb-4">
+                <h2 class="text-[13px] font-bold tracking-[0.2em] text-slate-900 uppercase border-b-2 border-slate-900 pb-1.5 mb-4">Languages</h2>
+                <ul class="flex flex-col gap-2 text-[12px]">
+                    <li class="flex justify-between items-center">
+                        <span class="font-semibold text-slate-800">English</span> 
+                        <span class="text-slate-500 text-[11px] uppercase tracking-wider">Native</span>
+                    </li>
+                    <li class="flex justify-between items-center">
+                        <span class="font-semibold text-slate-800">Spanish</span> 
+                        <span class="text-slate-500 text-[11px] uppercase tracking-wider">Fluent</span>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Right Column (70%) -->
+        <div id="right-column" class="w-[68%] p-10 flex flex-col gap-8 bg-white">
+            
+            <!-- Header -->
+            <header id="header-profile" class="mt-2">
+                <h1 class="text-[42px] font-black text-slate-900 tracking-tighter uppercase leading-none mb-2">
+                    Alex <span class="text-slate-500">Morgan</span>
+                </h1>
+                <p class="text-[16px] font-medium text-slate-800 tracking-[0.15em] uppercase">Full Stack Developer</p>
+            </header>
+
+            <!-- About Me -->
+            <section id="section-about">
+                <h2 class="text-[14px] font-bold tracking-[0.2em] text-slate-900 uppercase border-b border-slate-300 pb-2 mb-3">Profile</h2>
+                <p class="text-[12.5px] text-slate-600 leading-[1.7] text-justify">
+                    Detail-oriented Full Stack Developer with 5+ years of experience building scalable, high-performance web applications. Proficient in modern JavaScript ecosystems and cloud-native architectures. Passionate about writing clean, maintainable code and optimizing user experiences. Proven track record of collaborating with cross-functional teams to deliver robust software solutions from conception to deployment.
+                </p>
+            </section>
+
+            <!-- Experience -->
+            <section id="section-experience">
+                <h2 class="text-[14px] font-bold tracking-[0.2em] text-slate-900 uppercase border-b border-slate-300 pb-2 mb-4">Experience</h2>
+                
+                <div class="flex flex-col gap-6">
+                    <!-- Job 1 -->
+                    <div class="relative">
+                        <div class="flex justify-between items-baseline mb-1">
+                            <h3 class="text-[14px] font-bold text-slate-900">Senior Frontend Developer</h3>
+                            <span class="text-[11px] font-bold text-slate-500 tracking-wider uppercase">2021 - Present</span>
+                        </div>
+                        <p class="text-[12.5px] font-semibold text-slate-800 mb-2">TechNova Solutions <span class="text-slate-400 font-normal mx-1">|</span> San Francisco, CA</p>
+                        <ul class="list-disc list-outside ml-4 text-[12px] text-slate-600 leading-[1.6] space-y-1.5 marker:text-slate-400">
+                            <li>Spearheaded the migration of a legacy monolithic application to a modern React/Next.js micro-frontend architecture, improving initial load times by 45%.</li>
+                            <li>Developed and maintained a comprehensive UI component library using Storybook and Tailwind CSS, adopted by 4 internal engineering teams.</li>
+                            <li>Mentored junior developers and implemented strict CI/CD pipelines and code review processes, reducing production bugs by 30%.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Job 2 -->
+                    <div class="relative">
+                        <div class="flex justify-between items-baseline mb-1">
+                            <h3 class="text-[14px] font-bold text-slate-900">Full Stack Developer</h3>
+                            <span class="text-[11px] font-bold text-slate-500 tracking-wider uppercase">2018 - 2021</span>
+                        </div>
+                        <p class="text-[12.5px] font-semibold text-slate-800 mb-2">Creative Digital Agency <span class="text-slate-400 font-normal mx-1">|</span> Austin, TX</p>
+                        <ul class="list-disc list-outside ml-4 text-[12px] text-slate-600 leading-[1.6] space-y-1.5 marker:text-slate-400">
+                            <li>Built custom e-commerce solutions using Node.js, Express, and React, securely processing over $1M in monthly transactions.</li>
+                            <li>Designed and optimized RESTful APIs and complex PostgreSQL database schemas for high-traffic client applications.</li>
+                            <li>Integrated third-party payment gateways (Stripe, PayPal) and automated marketing workflows using webhooks.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Projects -->
+            <section id="section-projects">
+                <h2 class="text-[14px] font-bold tracking-[0.2em] text-slate-900 uppercase border-b border-slate-300 pb-2 mb-4">Selected Projects</h2>
+                
+                <div class="flex flex-col gap-5">
+                    <!-- Project 1 -->
+                    <div>
+                        <div class="flex justify-between items-baseline mb-1">
+                            <h3 class="text-[13.5px] font-bold text-slate-900">TaskFlow Pro</h3>
+                            <span class="text-[11px] text-slate-500 font-medium"><i class="fa-solid fa-link mr-1"></i> taskflow.dev</span>
+                        </div>
+                        <p class="text-[11px] font-semibold text-slate-800 mb-1.5">React, Node.js, Socket.io, MongoDB</p>
+                        <p class="text-[12px] text-slate-600 leading-[1.6]">
+                            A real-time project management tool featuring Kanban boards, live chat, and automated workflow triggers. Engineered to handle 10k+ concurrent WebSocket connections with minimal latency.
+                        </p>
+                    </div>
+
+                    <!-- Project 2 -->
+                    <div>
+                        <div class="flex justify-between items-baseline mb-1">
+                            <h3 class="text-[13.5px] font-bold text-slate-900">EcoMetrics Dashboard</h3>
+                            <span class="text-[11px] text-slate-500 font-medium"><i class="fa-brands fa-github mr-1"></i> /ecometrics</span>
+                        </div>
+                        <p class="text-[11px] font-semibold text-slate-800 mb-1.5">Vue 3, Python/FastAPI, PostgreSQL, Chart.js</p>
+                        <p class="text-[12px] text-slate-600 leading-[1.6]">
+                            An analytics dashboard for IoT environmental sensors. Implemented complex data aggregation pipelines in Python and interactive, responsive data visualizations on the frontend.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Education -->
+            <section id="section-education" class="mt-auto mb-2">
+                <h2 class="text-[14px] font-bold tracking-[0.2em] text-slate-900 uppercase border-b border-slate-300 pb-2 mb-3">Education</h2>
+                
+                <div>
+                    <div class="flex justify-between items-baseline mb-1">
+                        <h3 class="text-[13.5px] font-bold text-slate-900">B.S. in Computer Science</h3>
+                        <span class="text-[11px] font-bold text-slate-500 tracking-wider uppercase">2014 - 2018</span>
+                    </div>
+                    <p class="text-[12.5px] font-medium text-slate-800">University of Technology</p>
+                    <p class="text-[12px] text-slate-500 mt-0.5">Graduated with Honors | GPA: 3.8/4.0</p>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+</body>
+</html>
