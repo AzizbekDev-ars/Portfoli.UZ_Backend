@@ -15,6 +15,7 @@ import certificateRouter from "./src/routers/CertificateRoutes.js";
 import adminRoute from "./src/routers/AdminRoutes.js";
 import transactionRouter from "./src/routers/TransactionRoutes.js";
 import platformRouter from "./src/routers/PlatformRoutes.js";
+import supportRouter from "./src/routers/SupportRoutes.js";
 
 // global error middleware
 import { globalError } from "./src/middlewares/checkerMiddleware.js";
@@ -42,6 +43,7 @@ app.use("/certificate", certificateRouter);
 app.use("/transaction", transactionRouter);
 app.use("/platform", platformRouter);
 app.use("/admin", adminRoute);
+app.use("/support", supportRouter);
 
 // mongodb ulaymiz
 mongoose

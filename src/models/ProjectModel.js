@@ -10,8 +10,11 @@ const projectSchema = new mongoose.Schema({
         required: true,
     },
     techStacks: [String],
-    demoLink: String,
-    codeLink: String,
+    demoLink: { type: String, required: false },
+    codeLink: { type: String, required: false },
+    startDate: { type: String },
+    endDate: { type: String },
+    isOngoing: { type: Boolean, default: false },
     image: String,
     public_id: String,
     user: {

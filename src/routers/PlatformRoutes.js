@@ -18,7 +18,9 @@ platformRouter.get("/settings", asyncHandler(async (req, res) => {
         maintenanceMode: settings.maintenanceMode,
         bannerActive: settings.bannerActive,
         bannerText: settings.bannerText,
-        metaDesc: settings.metaDesc
+        metaDesc: settings.metaDesc,
+        freeProjectsLimit: settings.freeProjectsLimit,
+        freeCertLimit: settings.freeCertLimit
     });
 }));
 

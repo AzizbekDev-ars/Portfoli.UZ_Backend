@@ -1,11 +1,16 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
+import { OAuth2Client } from "google-auth-library";
 import { User } from "../models/UserModel.js";
 import { Project } from "../models/ProjectModel.js";
 import { Experience } from "../models/ExperienceModel.js";
 import { Certificate } from "../models/CertificateModel.js";
 import { CV } from "../models/CVModel.js";
 import cloudinary from "../config/cloudinary.js";
+import sendEmail from "../utils/sendEmail.js";
+
+const client = new OAuth2Client(process.env.CLIENT_ID);
 
 // Register
 export const register = async (req, res, next) => {
@@ -31,7 +36,8 @@ export const register = async (req, res, next) => {
         const user = await User.create({
             username,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            selectedTemplate: "zamonaviy"
         });
 
         const token = jwt.sign(
@@ -223,6 +229,130 @@ export const deleteAvatar = async (req, res, next) => {
         await user.save();
 
         res.json({ message: "Avatar o'chirildi" });
+    } catch (err) {
+        next(err);
+    }
+};
+
+// Google Auth (Login/Register)
+export const googleAuth = async (req, res, next) => {
+    try {
+        const { token } = req.body;
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.CLIENT_ID
+        });
+
+        const { email, name, sub, picture, email_verified } = ticket.getPayload();
+
+        if (!email_verified) {
+            return res.status(400).json({ success: false, message: "Google email tasdiqlanmagan!" });
+        }
+
+        // Gmail haqiqiyligini tekshirish (Google payload orqali allaqachon tekshirilgan bo'ladi)
+        // Ammo foydalanuvchi so'raganidek, agar email bo'sh bo'lsa hato beramiz
+        if (!email) {
+            return res.status(400).json({ success: false, message: "Google accountda email mavjud emas!" });
+        }
+
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            // Yangi user yaratish
+            const username = name.replace(/\s+/g, '').toLowerCase() + Math.floor(Math.random() * 1000);
+            user = await User.create({
+                username,
+                email,
+                googleId: sub,
+                profileImage: { url: picture, public_id: "" },
+                selectedTemplate: "zamonaviy"
+            });
+        } else if (!user.googleId) {
+            // Mavjud userga googleId ni bog'lash
+            user.googleId = sub;
+            if (!user.profileImage?.url) {
+                user.profileImage = { url: picture, public_id: "" };
+            }
+            await user.save();
+        }
+
+        const jwtToken = jwt.sign(
+            { id: user._id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: "30d" }
+        );
+
+        res.json({
+            success: true,
+            token: jwtToken,
+            user,
+            message: "Google orqali kirish muvaffaqiyatli"
+        });
+    } catch (err) {
+        res.status(400).json({ success: false, message: "Google xatoligi: " + err.message });
+    }
+};
+
+// Forgot Password
+export const forgotPassword = async (req, res, next) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: "Ushbu emailga ega foydalanuvchi topilmadi!" });
+        }
+
+        // Token yaratish
+        const resetToken = crypto.randomBytes(32).toString("hex");
+        user.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 soat
+
+        await user.save();
+
+        const resetUrl = `${req.get("origin")}/reset-password/${resetToken}`;
+        const message = `Siz parolni tiklashni so'radingiz. Iltimos ushbu linkka o'ting:\n\n ${resetUrl}\n\n Agar buni siz so'ramagan bo'lsangiz, xatga e'tibor bermang.`;
+
+        try {
+            await sendEmail({
+                email: user.email,
+                subject: "Portfolio.uz - Parolni tiklash",
+                message,
+                html: `<h3>Parolni tiklash</h3><p>Tiklash uchun quyidagi tugmani bosing:</p><a href="${resetUrl}" style="padding: 10px 20px; background: #6366f1; color: white; text-decoration: none; border-radius: 5px;">Parolni tiklash</a>`
+            });
+            res.json({ success: true, message: "Tiklash havolasi emailingizga yuborildi!" });
+        } catch (err) {
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpires = undefined;
+            await user.save();
+            return res.status(500).json({ success: false, message: "Xat yuborishda xatolik yuz berdi" });
+        }
+    } catch (err) {
+        next(err);
+    }
+};
+
+// Reset Password
+export const resetPassword = async (req, res, next) => {
+    try {
+        const resetPasswordToken = crypto.createHash("sha256").update(req.params.token).digest("hex");
+
+        const user = await User.findOne({
+            resetPasswordToken,
+            resetPasswordExpires: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            return res.status(400).json({ success: false, message: "Token yaroqsiz yoki muddati o'tgan" });
+        }
+
+        user.password = await bcrypt.hash(req.body.password, 10);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+
+        await user.save();
+
+        res.json({ success: true, message: "Parol muvaffaqiyatli o'zgartirildi!" });
     } catch (err) {
         next(err);
     }

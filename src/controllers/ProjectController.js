@@ -9,8 +9,11 @@ const createProject = async (req, res, next) => {
             projectname: req.body.projectname,
             description: req.body.description,
             techStacks: req.body.techStacks,
-            demoLink: req.body.demoLink,
-            codeLink: req.body.codeLink,
+            demoLink: req.body.demoLink || '',
+            codeLink: req.body.codeLink || '',
+            startDate: req.body.startDate || '',
+            endDate: req.body.endDate || '',
+            isOngoing: req.body.isOngoing === 'true' || req.body.isOngoing === true,
             isCV: req.body.isCV || false,
             image: req.file ? req.file.path : null,
             public_id: req.file ? req.file.filename : null,
@@ -64,8 +67,12 @@ const updateProjects = async (req, res, next) => {
         project.projectname = req.body.projectname || project.projectname;
         project.description = req.body.description || project.description;
         project.techStacks = req.body.techStacks || project.techStacks;
-        project.demoLink = req.body.demoLink || project.demoLink;
-        project.codeLink = req.body.codeLink || project.codeLink;
+        
+        if(req.body.demoLink !== undefined) project.demoLink = req.body.demoLink;
+        if(req.body.codeLink !== undefined) project.codeLink = req.body.codeLink;
+        if(req.body.startDate !== undefined) project.startDate = req.body.startDate;
+        if(req.body.endDate !== undefined) project.endDate = req.body.endDate;
+        if(req.body.isOngoing !== undefined) project.isOngoing = req.body.isOngoing === 'true' || req.body.isOngoing === true;
         if(req.body.isCV !== undefined) project.isCV = req.body.isCV;
 
         await project.save();

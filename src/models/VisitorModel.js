@@ -3,8 +3,7 @@ import mongoose from "mongoose";
 const visitorSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true
+        ref: "User"
     },
     page: String,
     ip: String,

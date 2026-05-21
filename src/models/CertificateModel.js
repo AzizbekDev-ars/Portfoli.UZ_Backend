@@ -21,6 +21,9 @@ const certificateSchema = new mongoose.Schema({
     description: {
         type: String,
     },
+    url: {
+        type: String,
+    },
     image: {
         type: String,
     },

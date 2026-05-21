@@ -15,6 +15,8 @@ import {
     getAdminSettings,
     updateAdminSettings
 } from "../controllers/AdminController.js";
+import { GetAllSupportMessages, UpdateSupportStatus, DeleteSupportMessage } from "../controllers/SupportController.js";
+import { GetGeneralVisitorStats, SendGeneralCountryStats, SendGeneralDailyStats } from "../controllers/VisitorController.js";
 
 const adminRoute = express.Router();
 
@@ -38,4 +40,15 @@ adminRoute.delete("/transactions/:id", protect, isAdmin, asyncHandler(deleteTran
 adminRoute.get("/settings", protect, isAdmin, asyncHandler(getAdminSettings));
 adminRoute.put("/settings", protect, isAdmin, asyncHandler(updateAdminSettings));
 
+// Support Routes
+adminRoute.get("/support", protect, isAdmin, asyncHandler(GetAllSupportMessages));
+adminRoute.put("/support/:id", protect, isAdmin, asyncHandler(UpdateSupportStatus));
+adminRoute.delete("/support/:id", protect, isAdmin, asyncHandler(DeleteSupportMessage));
+
+// Visitor Stats Routes
+adminRoute.get("/visitors/stats", protect, isAdmin, asyncHandler(GetGeneralVisitorStats));
+adminRoute.get("/visitors/country", protect, isAdmin, asyncHandler(SendGeneralCountryStats));
+adminRoute.get("/visitors/daily", protect, isAdmin, asyncHandler(SendGeneralDailyStats));
+
 export default adminRoute;
+
